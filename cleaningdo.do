@@ -1977,8 +1977,9 @@ crossbreed |       271  .0435367  .9093631
 */
 gen keep = 1 if ps >= .0435367 & ps <= .8037205
 tab cross if keep==1
-teffects ipwra (soldeggs i.headsex headage eduyears i.h_farmtype i.genderm##i.empow agem eduyearsm i.mphonem hh_size i.lruminant_D i.sruminant_D field_area wealth agri_inc milk_inc_total total_otherincome crop i.cross_other i.advicery_srvc i.extension_prgrm count_layers femaleshare i.sale_purpose i.sale_purpose1 i.food_purpose nearest_road market_weekly com_size i.regiondef, probit ) (cross  $ylist, probit) if keep==1, atet vce(robust)
-* p= 0.017 
+set cformat %5.4f
+teffects ipwra (soldeggs i.headsex headage eduyears i.h_farmtype i.genderm##i.empow agem eduyearsm i.mphonem hh_size i.lruminant_D i.sruminant_D field_area wealth agri_inc milk_inc_total total_otherincome crop i.cross_other i.advicery_srvc i.extension_prgrm count_layers femaleshare i.sale_purpose i.sale_purpose1 i.food_purpose nearest_road market_weekly com_size i.regiondef ) (cross  $ylist, probit) if keep==1, atet vce(robust)
+* p= 0.016
 cd "$MyProject/outputtables"
 outreg2 using atetip.xls, replace drop($ylist 0.cross) dec(2) nocons ctitle (Prob. of selling eggs (3 months)) addtext (Observations restricted to a region of common support)
 cd "$MyProject/outputfigure"
@@ -2041,6 +2042,7 @@ gen keep = 1 if ps >= .023036 & ps <= .8818747
 tab cross if keep==1
 teffects ipwra (egg_income i.headsex headage eduyears i.h_farmtype i.genderm##i.empow agem eduyearsm i.mphonem hh_size field_area wealth agri_inc milk_inc_total total_otherincome i.advicery_srvc i.extension_prgrm count_layers i.sale_purpose1 nearest_road market_weekly com_size i.regiondef) (cross  $ylist, probit) if keep==1, atet vce(robust) aeq
 *p= 0.000
+* Results here show that an additional chickenincreases average quarterly revenue from egg sales, on average, by 110 and 37 Birr forcrossbreed adopters and non-adopters, respectively. 
 cd "$MyProject/outputtables"
 outreg2 using atetip.xls, append drop($ylist 0.cross) dec(2) nocons ctitle (Income from egg sales (3 months)) addtext (Observations restricted to a region of common support) 
 //use https://www.tablesgenerator.com/ 
@@ -2255,7 +2257,7 @@ clear all
 set obs 12
 bro
 quietly gen float pval = .
-replace pval= 0.017 in 1
+replace pval= 0.016 in 1
 replace pval= 0.0001 in 2 
 replace pval= 0.0001 in 3
 replace pval= 0.387 in 4
@@ -2529,4 +2531,12 @@ graph save consumption, replace
 graph export consumption.tif, as(tif) replace
 graph export consumption.png, as(png) replace
 
- 
+
+**# feeding practice
+use "$MyProject\ETH_2018_ESS_v02_M_Stata\sect8_3_ls_w4.dta", clear
+keep if ls_type ==4
+tab ls_s8_3q12_1 // major feeding practice is missing
+tab ls_s8_3q13
+tab ls_s8_3q11
+tab ls_s8_3q04 // no fodder purchased of course
+
