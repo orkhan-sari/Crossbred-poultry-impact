@@ -13,7 +13,7 @@
 *********************************
 
 **# Identify crosbred chickens
-/* assign the folder for your research using the global folder command below in the line 17.
+/* assign the folder for your research using the global folder command below in the line 19.
 - within this folder create a folder named "ETH_2018_ESS_v02_M_Stata" for the raw downloaded data 
 */
 global MyProject "C:\Users\490A\Dropbox\SPIA research\githubfiles" 
@@ -2526,10 +2526,10 @@ recode poultry_inc (0=.)
 gen crossegginc=egg_inc12 if cross==1
 gen localegginc=egg_inc12 if cross==0
 gen total_eggsellers=  total_cons_ann if soldeggs==1
-graph bar (mean) egg_inc12 crossegginc localegginc  poultry_inc total_cons_ann total_eggsellers , blabel (total, format(%9.0f) position (outside) size (8pt)) legend ( position (11) ring(0) col(1) label (1 "Egg sales*") label (2 "Egg sales: crossbreed adopters*") label (3 "Egg sales: local breed adopters*") label(4 "Poultry sales*") label(5 "Consumption expenditure: all´") label(6 "Consumption expenditure: those who sell eggs´") size (8pt)) note ("* mean annual income of those who sell" "´ mean annual expenditure" "", size (8pt)  margin(small) position (7))
+graph bar (mean) egg_inc12 crossegginc localegginc  poultry_inc total_cons_ann total_eggsellers , blabel (total, format(%9.0f) position (outside) size (8pt)) legend ( position (11) ring(0) col(1) label (1 "Egg sales*") label (2 "Egg sales: crossbreed adopters*") label (3 "Egg sales: local breed adopters*") label(4 "Poultry sales*") label(5 "Consumption expenditure: all´") label(6 "Consumption expenditure: those who sell eggs´") size (8pt)) note ("* mean annual revenue of those who sell" "´ mean annual expenditure" "", size (8pt)  margin(small) position (7))
 graph save consumption, replace
 graph export consumption.tif, as(tif) replace
-graph export consumption.png, as(png) replace
+
 
 
 **# feeding practice
