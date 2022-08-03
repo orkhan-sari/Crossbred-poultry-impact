@@ -1,7 +1,7 @@
 * Project: SPIA small grant - AGRICULTURAL INNOVATIONS IN ETHIOPIA
 * Title: An analysis of adoption of crossbred poultry and its impact on well-being among rural poultry-keeping households in Ethiopia
 * Author: Dr. Orkhan Sariyev
-* Last update: 08.11.2021 
+* Last update: 03.08.2022 
 *****************************************************************************************************************
 
 * PART 1: Data cleaning
@@ -16,7 +16,7 @@
 /* assign the folder for your research using the global folder command below in the line 19.
 - within this folder create a folder named "ETH_2018_ESS_v02_M_Stata" for the raw downloaded data 
 */
-global MyProject "C:\Users\490A\Dropbox\SPIA research\githubfiles" 
+global MyProject "C:\Users\490A\Desktop\SPIA research\githubfiles" 
 use "$MyProject\ETH_2018_ESS_v02_M_Stata\sect8_1_ls_w4.dta", clear
 svyset [pw=pw_w4] 
 format ls_s8_1q03 %12.0g
@@ -194,7 +194,7 @@ save egg_income, replace
 
 **# household size // hhsize.dta - found also in ls data
 
-use "C:\Users\490A\Dropbox\SPIA research\Data analyses\ETH_2018_ESS_v02_M_Stata\sect1_hh_w4.dta", clear
+use "$MyProject\ETH_2018_ESS_v02_M_Stata\sect1_hh_w4.dta", clear
 drop if saq14==2
 drop if s1q05==2
 bysort household_id: egen hh_size= count (household_id)
@@ -740,7 +740,7 @@ save, replace
 
 **# other livestock // livestock.dta
 
-use "C:\Users\490A\Dropbox\SPIA research\Data analyses\ETH_2018_ESS_v02_M_Stata\sect8_1_ls_w4.dta", clear
+use "$MyProject\ETH_2018_ESS_v02_M_Stata\sect8_1_ls_w4.dta", clear
 drop if ls_s8_1q01==0
 drop if ls_s8_1q01==.
 keep household_id ls_code ls_s8_1q01 ls_s8_1q02
@@ -1858,7 +1858,7 @@ replace total_otherincome = total_otherincome /1000
 replace nearest_road= nearest_road/60
 replace com_size =com_size/1000
 regress cross $ylist, vce(robust)
-outreg2 using mainlpm.tex, replace sideway stats(coef aster se) dec(3) nocons noparen adds(Adjust. R2, e(r2_a)) // this is for latex tabel 3
+
 cd "$MyProject/outputfigure"
 set scheme plotplainblind
 lab def empow 0 "Constrained" 1"Empowered"
@@ -2386,7 +2386,7 @@ graph export femalepurpose.tif, as(tif) replace
 cd "$MyProject/outputfigure"
 net install grc1leg.pkg
 grc1leg malepurpose.gph femalepurpose.gph, graphregion( color(white) ) iscale (0.6) imargin (zero)
-graph save "Graph" "C:\Users\490A\Dropbox\SPIA research\Data analyses\outputfigure\holderpurposes.gph" //manyally moved 0 and 1 for better visibility 
+graph save "Graph" "$MyProject\outputfigure\holderpurposes.gph" //manyally moved 0 and 1 for better visibility 
 graph export holderpurpose.tif, as(tif) replace
 graph export holderpurpose.png, as(png) replace
 
@@ -2458,7 +2458,7 @@ cd "$MyProject/outputfigure"
 graph pie,  over(ls_s8_1q06) sort (ls_s8_1q06) plabel(_all percent, color (navy) size(10pt) format(%1.0f) gap(5)) pie(1, explode) pie(2, explode) legend ( label(1 "Animal sales") label (2 "Sales of livestock products") label (3 "Food for the family") label (4 "Savings and insourance") label (5 "Social status") label (6 "Manure") label (7 "Other") position(6) col (3) size (8pt) region (color(none)) margin (zero)) graphregion(fcolor(white)) title(Purpose for keeping poultry - Female manager , color(navy) margin(medsmall) size (10pt))
 graph save femalepurpose_manager, replace
 grc1leg malepurpose_manager.gph femalepurpose_manager.gph, graphregion( color(white) ) iscale (0.6) imargin (zero)
-graph save "Graph" "C:\Users\490A\Dropbox\SPIA research\Data analyses\outputfigure\managerpurposesmerged.gph"
+graph save "Graph" "$MyProject\outputfigure\managerpurposesmerged.gph"
 graph export managerpurposes.tif, as(tif) replace
 graph export managerpurposes.png, as(png) replace
 
