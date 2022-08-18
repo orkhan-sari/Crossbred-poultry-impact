@@ -1,7 +1,7 @@
 * Project: SPIA small grant - AGRICULTURAL INNOVATIONS IN ETHIOPIA
 * Title: An analysis of adoption of crossbred poultry and its impact on well-being among rural poultry-keeping households in Ethiopia
 * Author: Dr. Orkhan Sariyev
-* Last update: 03.08.2022; edit 12.08: please adjust "set scheme" if needed. In this version defaul is set: "set scheme sj"
+* Last update: 03.08.2022; edit 18.08: please adjust "set scheme" if needed. In this version defaul is set: "set scheme plotplainblind from blindschemes"
 *****************************************************************************************************************
 
 * PART 1: Data cleaning
@@ -2346,7 +2346,8 @@ drop if _merge==1
 drop _merge
 rename s1q02 gender
 keep if gender==1
-set scheme sj
+ssc install blindschemes, replace
+set scheme plotplainblind
 cd "$MyProject/outputfigure"
 graph pie,  over(ls_s8_1q06) sort descending plabel(_all percent, color (navy) size(10pt) format(%1.0f) gap(5)) pie(1, explode) pie(2, explode) legend ( label(1 "Animal sales") label (2 "Sales of livestock products") label (3 "Food for the family") label (4 "Savings and insourance") label (5 "Social status") label (6 "Other") label (7 "Manure") position(6) col (3) size (8pt) region (color(none)) margin (zero)) graphregion(fcolor(white)) title(Purpose for keeping poultry - Male holder , color(navy) margin(medsmall))
 graph save malepurpose, replace
@@ -2396,7 +2397,7 @@ use "$MyProject\ETH_2018_ESS_v02_M_Stata\sect8_1_ls_w4.dta", clear
 drop if ls_s8_1q01==0
 drop if ls_code <10
 drop if ls_code >12
-set scheme sj
+set scheme plotplainblind
 rename ls_s8_1q05_1 manager_id
 cd "$MyProject/cleaned"
 merge m:m household_id manager_id using manager_id // matched using he main manager, second maanager is ignored to concantrate on the main.
@@ -2431,7 +2432,7 @@ use "$MyProject\ETH_2018_ESS_v02_M_Stata\sect8_1_ls_w4.dta", clear
 drop if ls_s8_1q01==0
 drop if ls_code <10
 drop if ls_code >12
-set scheme sj
+set scheme plotplainblind
 rename ls_s8_1q05_1 manager_id
 cd "$MyProject/cleaned"
 merge m:m household_id manager_id using manager_id // matched using he main manager, second maanager is ignored to concantrate on the main.
@@ -2468,7 +2469,7 @@ cd "$MyProject/cleaned"
 use data, replace
 recode kinm (8=6) // 1 obs per each case, merging to other to improve the figure visually
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 keep if headsex==0
 graph pie [pweight = pw_w4],  over(kinh) sort (kinh) plabel( _all percent, color (black) size(12pt) format(%1.0f) gap(5)) pie(_all, explode) legend ( label(1 "Head") label (2 "Spouse") label (3 "Son/Daughter") label (4 "Father/Mother") label (5 "Other(sister,brother,etc)") position(6) col (3) size (8pt) region (color(none)) margin (zero)) graphregion(fcolor(white)) title(Ownership, color(black) margin(medsmall) size (10pt))
 graph save graph1v1, replace
@@ -2489,7 +2490,7 @@ cd "$MyProject/cleaned"
 use data, replace
 recode kinm (8=6) // 1 obs per each case, merging to other to improve the figure visually
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 keep if headsex==1
 graph pie [pweight = pw_w4],  over(kinh) sort (kinh) plabel( _all percent, color (black) size(12pt) format(%1.0f) gap(5)) pie(_all, explode) legend ( label(1 "Head") label (2 "Spouse") label (3 "Son/Daughter") label (4 "Father/Mother") label (5 "Other(sister,brother,etc)") position(6) col (3) size (8pt) region (color(none)) margin (zero)) graphregion(fcolor(white)) title(Ownership, color(black) margin(medsmall) size (10pt))
 graph save graph3v1, replace
@@ -2519,7 +2520,7 @@ merge 1:1 household_id using adulteq
 drop if _merge==2
 drop _merge
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 gen egg_inc12= egg_income *4
 recode egg_inc12 (0=.)
 recode poultry_inc (0=.)
