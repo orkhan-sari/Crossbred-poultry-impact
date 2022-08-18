@@ -1825,7 +1825,7 @@ foreach i of local test3 {
 **# Wealth estimation - Table 2
 cd "$MyProject/cleaned"
 use data, clear
-set scheme sj
+set scheme plotplainblind
 lab def cross 1 "crossbreed" 0 "local"
 lab val cross cross
 merge m:1 ea_id using comsize
@@ -1860,7 +1860,7 @@ replace com_size =com_size/1000
 regress cross $ylist, vce(robust)
 
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 lab def empow 0 "Constrained" 1"Empowered"
 lab val empow empow
 margins, dydx( genderm ) at( empow =(0(1)1))
@@ -1956,7 +1956,7 @@ outreg2 using probitip.tex, replace sideway stats(coef aster se) dec(3) nocons n
 * if sold any eggs -  soldeggs*/
 cd "$MyProject/cleaned"
 use dataw, clear
-set scheme sj
+set scheme plotplainblind
 set cformat %5.3f
 global ylist i.headsex headage eduyears i.h_farmtype i.genderm##i.empow agem eduyearsm i.mphonem hh_size i.lruminant_D i.sruminant_D field_area wealth agri_inc milk_inc_total total_otherincome crop i.cross_other i.advicery_srvc i.extension_prgrm n_poultry femaleshare i.sale_purpose i.sale_purpose1 i.food_purpose nearest_road market_weekly com_size i.regiondef 
 probit cross $ylist, vce (robust)
@@ -1983,7 +1983,7 @@ teffects ipwra (soldeggs i.headsex headage eduyears i.h_farmtype i.genderm##i.em
 cd "$MyProject/outputtables"
 outreg2 using atetip.xls, replace drop($ylist 0.cross) dec(2) nocons ctitle (Prob. of selling eggs (3 months)) addtext (Observations restricted to a region of common support)
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 teoverlap, legend ( position (12) ring(0) col(1) size(small) label(1 "Local breed") label( 2 "Crossbreed")) xtitle(Predicted probability of adoption) note (Figure A, position (6) size (8pt)) ptlevel(1) kernel(gau)
 graph save figa, replace
 /*STATA example for interpretation of the graph: 
@@ -1998,7 +1998,7 @@ evidence that the overlap assumption is violated*/
 cd "$MyProject/cleaned"
 use data, clear
 keep if soldeggs==1
-set scheme sj
+set scheme plotplainblind
 set cformat %5.3f
 factor average_age childepn read_write depratio nom_nonfoodcons_aeq kitchen ironroof toilet n_rooms lruminant sruminant electapplience s8q02d s8q02b insecuremonths, pcf
 factor childepn read_write depratio nom_nonfoodcons_aeq kitchen ironroof toilet n_rooms electapplience s8q02d s8q02b insecuremonths, pcf
@@ -2022,7 +2022,7 @@ teffects ipwra (eggssold i.headsex headage eduyears i.h_farmtype i.genderm##i.em
 cd "$MyProject/outputtables"
 outreg2 using atetip.xls, append drop($ylist 0.cross) dec(2) nocons ctitle (# of eggs sold per hen (3 months)) addtext (Observations restricted to a region of common support)
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 teoverlap, legend ( position (12) ring(0) col(1) size(small) label(1 "Local breed") label( 2 "Crossbreed")) xtitle(Predicted probability of adoption) note (Figure B, position (6) size (8pt)) ptlevel(1) kernel(gau)
 graph save figb, replace
 
@@ -2030,7 +2030,7 @@ graph save figb, replace
 cd "$MyProject/cleaned"
 use data, clear
 keep if soldeggs==1
-set scheme sj
+set scheme plotplainblind
 set cformat %5.3f
 factor average_age childepn read_write depratio nom_nonfoodcons_aeq kitchen ironroof toilet n_rooms lruminant sruminant electapplience s8q02d s8q02b insecuremonths, pcf
 factor childepn read_write depratio nom_nonfoodcons_aeq kitchen ironroof toilet n_rooms electapplience s8q02d s8q02b insecuremonths, pcf
@@ -2049,7 +2049,7 @@ outreg2 using atetip.xls, append drop($ylist 0.cross) dec(2) nocons ctitle (Inco
 
 * graph combine - Figure A1
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 graph combine figa.gph figb.gph, graphregion( color(white) ) iscale (0.9) imargin (zero) xcommon ycommon 
 graph save figaandb.eps, replace // even better - save as eps for tif preview for latex
 
@@ -2087,7 +2087,7 @@ teffects ipwra (nonfood_aeq1 $ylist) (cross  $ylist, probit) if keep==1, atet vc
 outreg2 using atetipexp.xls, replace drop($ylist 0.cross) dec(2) nocons ctitle (Non-food expenditure (1 month)) addnote (Observations restricted to a region of common support)
 *p=0.387
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 teoverlap, legend ( position (12) ring(0) col(1) size(small) label(1 "Local breed") label( 2 "Crossbreed")) xtitle(Predicted probability of adoption) note (Figure A, position (6) size (8pt)) ptlevel(1) kernel(gau)
 graph save egg, replace
 
@@ -2097,7 +2097,7 @@ use data, clear
 keep if soldeggs==1  
 gen food_aeq=exp_food/adulteq
 cd "$MyProject/outputtables"
-set scheme sj
+set scheme plotplainblind
 set cformat %5.3f
 factor childepn read_write depratio kitchen ironroof toilet n_rooms electapplience s8q02d s8q02b insecuremonths, pcf
 /* varaibles load on poverty index*/
@@ -2114,7 +2114,7 @@ outreg2 using atetipexp.xls, append drop($ylist 0.cross) dec(2) nocons ctitle (F
 cd "$MyProject/cleaned"
 use dataw, clear
 cd "$MyProject/outputtables"
-set scheme sj
+set scheme plotplainblind
 set cformat %5.3f
 gen nonfood_aeq1=nonfood_exp1/adulteq
 factor average_age childepn read_write depratio kitchen ironroof toilet n_rooms lruminant sruminant electapplience s8q02d s8q02b insecuremonths, pcf
@@ -2144,13 +2144,13 @@ teffects ipwra (food_aeq $ylist ) (cross  $ylist, probit) if keep==1, atet vce(r
 *p=0.280
 outreg2 using atetipexp.xls, append drop($ylist 0.cross) dec(2) nocons ctitle (Food expenditure on food from markets and away (7 days))
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 teoverlap, legend ( position (12) ring(0) col(1) size(small) label(1 "Local breed") label( 2 "Crossbreed")) xtitle(Predicted probability of adoption) note (Figure B, position (6) size (8pt)) ptlevel(1) kernel(gau)
 graph save whole, replace
 
 * graph combine - Figure A2
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 graph combine egg.gph whole.gph, graphregion( color(white) ) iscale (0.9) imargin (zero) xcommon ycommon 
 graph save eggandwhole.eps, replace
 
@@ -2159,7 +2159,7 @@ graph save eggandwhole.eps, replace
 cd "$MyProject/cleaned"
 use data, clear
 drop if hdds==. // 2hhs have missing data here
-set scheme sj
+set scheme plotplainblind
 set cformat %5.3f
 factor average_age childepn read_write depratio nom_nonfoodcons_aeq kitchen ironroof toilet n_rooms lruminant sruminant electapplience, pcf
 // varaibles related to food security are not included to wealth estimation here
@@ -2186,7 +2186,7 @@ teffects ipwra (hdds $ylist, poisson ) (cross $ylist, probit) if keep==1, atet v
 *p=0.151
 outreg2 using atetdiet.xls, replace drop($ylist 0.cross) dec(2) nocons ctitle (HDDS) addnote (Observations restricted to a region of common support)
 cd "$MyProject/outputfigure"
-set scheme sj
+set scheme plotplainblind
 teoverlap, legend ( position (12) ring(0) col(1) size(small) label(1 "Local breed") label( 2 "Crossbreed")) xtitle(Predicted probability of adoption) ptlevel(1) kernel(gau) // Figure A3
 teffects ipwra (fies i.headsex headage eduyears hh_size crop i.lruminant_D i.sruminant_D field_area wealth agri_inc milk_inc_total total_otherincome n_poultry nearest_road market_weekly i.regiondef , poisson ) (cross  $ylist, probit) if keep==1, atet vce(robust) 
 *p= 0.350
@@ -2346,7 +2346,6 @@ drop if _merge==1
 drop _merge
 rename s1q02 gender
 keep if gender==1
-ssc install blindschemes, replace
 set scheme plotplainblind
 cd "$MyProject/outputfigure"
 graph pie,  over(ls_s8_1q06) sort descending plabel(_all percent, color (navy) size(10pt) format(%1.0f) gap(5)) pie(1, explode) pie(2, explode) legend ( label(1 "Animal sales") label (2 "Sales of livestock products") label (3 "Food for the family") label (4 "Savings and insourance") label (5 "Social status") label (6 "Other") label (7 "Manure") position(6) col (3) size (8pt) region (color(none)) margin (zero)) graphregion(fcolor(white)) title(Purpose for keeping poultry - Male holder , color(navy) margin(medsmall))
