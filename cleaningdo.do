@@ -1,7 +1,7 @@
 * Project: SPIA small grant - AGRICULTURAL INNOVATIONS IN ETHIOPIA
 * Title: An analysis of adoption of crossbred poultry and its impact on well-being among rural poultry-keeping households in Ethiopia
 * Author: Dr. Orkhan Sariyev
-* Last update: 09.12.2022 
+* Last update: 09.12.2022; please adjust "set scheme" if needed. In this version defaul is set: "set scheme plottig from blindschemes" 
 *****************************************************************************************************************
 
 * PART 1: Data cleaning
