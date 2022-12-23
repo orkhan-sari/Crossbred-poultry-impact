@@ -1,7 +1,7 @@
 * Project: SPIA small grant - AGRICULTURAL INNOVATIONS IN ETHIOPIA
 * Title: An analysis of adoption of crossbred poultry and its impact on well-being among rural poultry-keeping households in Ethiopia
 * Author: Dr. Orkhan Sariyev
-* Last update: 03.08.2022; edit 18.08: please adjust "set scheme" if needed. In this version defaul is set: "set scheme plotplainblind from blindschemes"
+* Last update: 09.12.2022 
 *****************************************************************************************************************
 
 * PART 1: Data cleaning
@@ -16,7 +16,7 @@
 /* assign the folder for your research using the global folder command below in the line 19.
 - within this folder create a folder named "ETH_2018_ESS_v02_M_Stata" for the raw downloaded data 
 */
-global MyProject "C:\Research\SPIA research\githubfiles" 
+global MyProject "C:\Users\490A\Desktop\SPIA research\githubfiles" 
 use "$MyProject\ETH_2018_ESS_v02_M_Stata\sect8_1_ls_w4.dta", clear
 svyset [pw=pw_w4] 
 format ls_s8_1q03 %12.0g
@@ -1848,7 +1848,7 @@ estat kmo
 predict wealth
 save dataw, replace //dataw will be used when full sample is employed.
 
-**# Probit model - Table 3
+**# LPM model - Table 3
 cd "$MyProject/cleaned" 
 use dataw, clear
 global ylist i.headsex headage eduyears i.h_farmtype i.genderm##i.empow agem eduyearsm i.mphonem hh_size i.lruminant_D i.sruminant_D field_area wealth agri_inc milk_inc_total total_otherincome crop i.cross_other i.advicery_srvc i.extension_prgrm n_poultry femaleshare i.sale_purpose i.sale_purpose1 i.food_purpose nearest_road market_weekly com_size i.regiondef 
@@ -1858,6 +1858,7 @@ replace total_otherincome = total_otherincome /1000
 replace nearest_road= nearest_road/60
 replace com_size =com_size/1000
 regress cross $ylist, vce(robust)
+ovtest
 
 cd "$MyProject/outputfigure"
 set scheme plotplainblind
@@ -1983,7 +1984,7 @@ teffects ipwra (soldeggs i.headsex headage eduyears i.h_farmtype i.genderm##i.em
 cd "$MyProject/outputtables"
 outreg2 using atetip.xls, replace drop($ylist 0.cross) dec(2) nocons ctitle (Prob. of selling eggs (3 months)) addtext (Observations restricted to a region of common support)
 cd "$MyProject/outputfigure"
-set scheme plotplainblind
+set scheme plottig
 teoverlap, legend ( position (12) ring(0) col(1) size(small) label(1 "Local breed") label( 2 "Crossbreed")) xtitle(Predicted probability of adoption) note (Figure A, position (6) size (8pt)) ptlevel(1) kernel(gau)
 graph save figa, replace
 /*STATA example for interpretation of the graph: 
@@ -2022,7 +2023,7 @@ teffects ipwra (eggssold i.headsex headage eduyears i.h_farmtype i.genderm##i.em
 cd "$MyProject/outputtables"
 outreg2 using atetip.xls, append drop($ylist 0.cross) dec(2) nocons ctitle (# of eggs sold per hen (3 months)) addtext (Observations restricted to a region of common support)
 cd "$MyProject/outputfigure"
-set scheme plotplainblind
+set scheme plottig
 teoverlap, legend ( position (12) ring(0) col(1) size(small) label(1 "Local breed") label( 2 "Crossbreed")) xtitle(Predicted probability of adoption) note (Figure B, position (6) size (8pt)) ptlevel(1) kernel(gau)
 graph save figb, replace
 
@@ -2049,7 +2050,7 @@ outreg2 using atetip.xls, append drop($ylist 0.cross) dec(2) nocons ctitle (Inco
 
 * graph combine - Figure A1
 cd "$MyProject/outputfigure"
-set scheme plotplainblind
+set scheme plottig
 graph combine figa.gph figb.gph, graphregion( color(white) ) iscale (0.9) imargin (zero) xcommon ycommon 
 graph save figaandb.eps, replace // even better - save as eps for tif preview for latex
 
@@ -2087,7 +2088,7 @@ teffects ipwra (nonfood_aeq1 $ylist) (cross  $ylist, probit) if keep==1, atet vc
 outreg2 using atetipexp.xls, replace drop($ylist 0.cross) dec(2) nocons ctitle (Non-food expenditure (1 month)) addnote (Observations restricted to a region of common support)
 *p=0.387
 cd "$MyProject/outputfigure"
-set scheme plotplainblind
+set scheme plottig
 teoverlap, legend ( position (12) ring(0) col(1) size(small) label(1 "Local breed") label( 2 "Crossbreed")) xtitle(Predicted probability of adoption) note (Figure A, position (6) size (8pt)) ptlevel(1) kernel(gau)
 graph save egg, replace
 
@@ -2144,13 +2145,13 @@ teffects ipwra (food_aeq $ylist ) (cross  $ylist, probit) if keep==1, atet vce(r
 *p=0.280
 outreg2 using atetipexp.xls, append drop($ylist 0.cross) dec(2) nocons ctitle (Food expenditure on food from markets and away (7 days))
 cd "$MyProject/outputfigure"
-set scheme plotplainblind
+set scheme plottig
 teoverlap, legend ( position (12) ring(0) col(1) size(small) label(1 "Local breed") label( 2 "Crossbreed")) xtitle(Predicted probability of adoption) note (Figure B, position (6) size (8pt)) ptlevel(1) kernel(gau)
 graph save whole, replace
 
 * graph combine - Figure A2
 cd "$MyProject/outputfigure"
-set scheme plotplainblind
+set scheme plottig
 graph combine egg.gph whole.gph, graphregion( color(white) ) iscale (0.9) imargin (zero) xcommon ycommon 
 graph save eggandwhole.eps, replace
 
@@ -2186,7 +2187,7 @@ teffects ipwra (hdds $ylist, poisson ) (cross $ylist, probit) if keep==1, atet v
 *p=0.151
 outreg2 using atetdiet.xls, replace drop($ylist 0.cross) dec(2) nocons ctitle (HDDS) addnote (Observations restricted to a region of common support)
 cd "$MyProject/outputfigure"
-set scheme plotplainblind
+set scheme plottig
 teoverlap, legend ( position (12) ring(0) col(1) size(small) label(1 "Local breed") label( 2 "Crossbreed")) xtitle(Predicted probability of adoption) ptlevel(1) kernel(gau) // Figure A3
 teffects ipwra (fies i.headsex headage eduyears hh_size crop i.lruminant_D i.sruminant_D field_area wealth agri_inc milk_inc_total total_otherincome n_poultry nearest_road market_weekly i.regiondef , poisson ) (cross  $ylist, probit) if keep==1, atet vce(robust) 
 *p= 0.350
@@ -2333,7 +2334,7 @@ set more on
 
 **# other figures
 * Figure 3:
-// differentiatted by  holder gender  - sampling weights no-considered - sample characteristics only. 
+// differentiatted by  holder gender  - sampling weights not considered - sample characteristics only. 
 use "$MyProject\ETH_2018_ESS_v02_M_Stata\sect8_1_ls_w4.dta", clear
 drop if ls_s8_1q01==0
 drop if ls_code <10
@@ -2385,7 +2386,7 @@ graph save femalepurpose, replace
 graph export femalepurpose.tif, as(tif) replace
 cd "$MyProject/outputfigure"
 net install grc1leg.pkg
-grc1leg malepurpose.gph femalepurpose.gph, graphregion( color(white) ) iscale (0.6) imargin (zero)
+grc1leg malepurpose.gph femalepurpose.gph, graphregion( color(white) ) iscale (1) imargin (zero)
 graph save "Graph" "$MyProject\outputfigure\holderpurposes.gph" //manyally moved 0 and 1 for better visibility 
 graph export holderpurpose.tif, as(tif) replace
 graph export holderpurpose.png, as(png) replace
@@ -2457,7 +2458,7 @@ tab ls_s8_1q06
 cd "$MyProject/outputfigure"
 graph pie,  over(ls_s8_1q06) sort (ls_s8_1q06) plabel(_all percent, color (navy) size(10pt) format(%1.0f) gap(5)) pie(1, explode) pie(2, explode) legend ( label(1 "Animal sales") label (2 "Sales of livestock products") label (3 "Food for the family") label (4 "Savings and insourance") label (5 "Social status") label (6 "Manure") label (7 "Other") position(6) col (3) size (8pt) region (color(none)) margin (zero)) graphregion(fcolor(white)) title(Purpose for keeping poultry - Female manager , color(navy) margin(medsmall) size (10pt))
 graph save femalepurpose_manager, replace
-grc1leg malepurpose_manager.gph femalepurpose_manager.gph, graphregion( color(white) ) iscale (0.6) imargin (zero)
+grc1leg malepurpose_manager.gph femalepurpose_manager.gph, graphregion( color(white) ) iscale (1) imargin (zero)
 graph save "Graph" "$MyProject\outputfigure\managerpurposesmerged.gph"
 graph export managerpurposes.tif, as(tif) replace
 graph export managerpurposes.png, as(png) replace
@@ -2470,11 +2471,11 @@ recode kinm (8=6) // 1 obs per each case, merging to other to improve the figure
 cd "$MyProject/outputfigure"
 set scheme plotplainblind
 keep if headsex==0
-graph pie [pweight = pw_w4],  over(kinh) sort (kinh) plabel( _all percent, color (black) size(12pt) format(%1.0f) gap(5)) pie(_all, explode) legend ( label(1 "Head") label (2 "Spouse") label (3 "Son/Daughter") label (4 "Father/Mother") label (5 "Other(sister,brother,etc)") position(6) col (3) size (8pt) region (color(none)) margin (zero)) graphregion(fcolor(white)) title(Ownership, color(black) margin(medsmall) size (10pt))
+graph pie [pweight = pw_w4],  over(kinh) sort (kinh) plabel( _all percent, color (black) size(12pt) format(%1.0f) gap(5)) legend ( label(1 "Head") label (2 "Spouse") label (3 "Son/Daughter") label (4 "Father/Mother") label (5 "Other(sister,brother,etc)") position(6) col (3) size (8pt) region (color(none)) margin (zero)) graphregion(fcolor(white)) title(Ownership, color(black) margin(medsmall) size (10pt))
 graph save graph1v1, replace
 graph pie [pweight = pw_w4],  over(kinm) sort (kinm) plabel( _all percent, color (black) size(12pt) format(%1.0f) gap(5)) legend ( label(1 "Head") label (2 "Spouse") label (3 "Son/Daughter") label (4 "Father/Mother") label (5 "Other(sister,brother,etc)") position(6) col (3) size (8pt) region (color(none)) margin (zero)) graphregion(fcolor(white)) title( Management, color(black) margin(medsmall) size (10pt))
 graph save graph2v1, replace
-grc1leg graph1v1.gph graph2v1.gph, graphregion( color(white) ) iscale (0.6) imargin (zero) title (Male headed households, color(black) margin(medsmall) size (12pt) )
+grc1leg graph1v1.gph graph2v1.gph, graphregion( color(white) ) iscale (1) imargin (zero) title (Male headed households, color(black) margin(medsmall) size (12pt) )
 graph save ownershipandmanagementmalehh, replace
 graph export ownershipandmanagementmalehh.tif, as(tif) replace
 graph export ownershipandmanagementmalehh.png, as(png) replace
@@ -2495,7 +2496,7 @@ graph pie [pweight = pw_w4],  over(kinh) sort (kinh) plabel( _all percent, color
 graph save graph3v1, replace
 graph pie [pweight = pw_w4],  over(kinm) sort (kinm) plabel( _all percent, color (black) size(12pt) format(%1.0f) gap(5)) pie(_all, explode) legend ( label(1 "Head") label (2 "Spouse") label (3 "Son/Daughter") label (4 "Father/Mother") label (5 "Other(sister,brother,etc)") position(6) col (3) size (8pt) region (color(none)) margin (zero)) graphregion(fcolor(white)) title( Management, color(black) margin(medsmall) size (10pt))
 graph save graph4v1, replace
-grc1leg graph3v1.gph graph4v1.gph, graphregion( color(white) ) iscale (0.6) imargin (zero) title (Female headed households, color(black) margin(medsmall) size (12pt) )
+grc1leg graph3v1.gph graph4v1.gph, graphregion( color(white) ) iscale (1) imargin (zero) title (Female headed households, color(black) margin(medsmall) size (12pt) )
 graph save ownershipandmanagementfemalehh, replace
 graph export ownershipandmanagementfemalehh.tif, as(tif) replace
 graph export ownershipandmanagementfemalehh.png, as(png) replace
@@ -2519,7 +2520,7 @@ merge 1:1 household_id using adulteq
 drop if _merge==2
 drop _merge
 cd "$MyProject/outputfigure"
-set scheme plotplainblind
+set scheme plottig
 gen egg_inc12= egg_income *4
 recode egg_inc12 (0=.)
 recode poultry_inc (0=.)
