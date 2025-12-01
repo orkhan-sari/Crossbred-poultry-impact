@@ -1,2 +1,2 @@
-# Crossbred-poultry-impact
-Here, I add the cleaning do file for public use and perusal. 
+# Replication .do
+This repository supplies the cleaning do file for replication purposes, public use and perusal for the resach article:  [Crossbred poultry adoption and impact: Evidence from Ethiopia](https://doi.org/10.1016/j.ssaho.2022.100394). 
